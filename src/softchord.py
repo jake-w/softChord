@@ -7,21 +7,21 @@ Writen by: Matvey Adzhigirey
 Development started in 10 December 2010
 
 """
+# NOTE sqlite3 is intentionally used instead of QtSql.
+#FIXME - tag for fixes needed
+#DEBUG - tag for debugging code.
+#NOTE - tag for notes
 
-# NOTE The sqlite3 is intentionally used instead of QtSql.
-
-# These are imported for Python 3 compatability:
 # Use Unicode for all strings:
 from __future__ import unicode_literals
 
 from __future__ import division
 
 
-from PyQt4 import QtCore, QtGui, uic
-from PyQt4.QtCore import Qt
+from PyQt5 import QtCore, QtGui, uic, QtWidgets, QtPrintSupport
+from PyQt5.QtCore import Qt
 import sys, os
 import sqlite3
-import codecs
 import copy
 import shutil
 import platform
@@ -107,36 +107,36 @@ import softchord_main_window_ui, softchord_chord_dialog_ui, softchord_pdf_dialog
 
 
 paper_sizes_list = [
-        (QtGui.QPrinter.Letter, "Letter (8.5 x 11 inches, 216 x 279 mm)"),
-        (QtGui.QPrinter.Legal, "Legal (8.5 x 14 inches, 216 x 356 mm)"),
-        (QtGui.QPrinter.A0, "A0 (841 x 1189 mm)"),
-        (QtGui.QPrinter.A1, "A1 (94 x 841 mm)"),
-        (QtGui.QPrinter.A2, "A2 (420 x 594 mm)"),
-        (QtGui.QPrinter.A3, "A3 (297 x 420 mm)"),
-        (QtGui.QPrinter.A4, "A4 (210 x 297 mm, 8.26 x 11.69 inches)"),
-        (QtGui.QPrinter.A5, "A5 (148 x 210 mm)"),
-        (QtGui.QPrinter.A6, "A6 (105 x 148 mm)"),
-        (QtGui.QPrinter.A7, "A7 (74 x 105 mm)"),
-        (QtGui.QPrinter.A8, "A8 (52 x 74 mm)"),
-        (QtGui.QPrinter.A9, "A9 (37 x 52 mm)"),
-        (QtGui.QPrinter.B0, "B0 (1030 x 1456 mm)"),
-        (QtGui.QPrinter.B1, "B1 (728 x 1030 mm)"),
-        (QtGui.QPrinter.B2, "B2 (515 x 728 mm)"),
-        (QtGui.QPrinter.B3, "B3 (364 x 515 mm)"),
-        (QtGui.QPrinter.B4, "B4 (257 x 364 mm)"),
-        (QtGui.QPrinter.B5, "B5 (182 x 257 mm, 7.17 x 10.13 inches)"),
-        (QtGui.QPrinter.B6, "B6 (128 x 182 mm)"),
-        (QtGui.QPrinter.B7, "B7 (91 x 128 mm)"),
-        (QtGui.QPrinter.B8, "B8 (64 x 91 mm)"),
-        (QtGui.QPrinter.B9, "B9 (45 x 64 mm)"),
-        (QtGui.QPrinter.B10, "B10 (32 x 45 mm)"),
-        (QtGui.QPrinter.C5E, "C5E (163 x 229 mm)"),
-        (QtGui.QPrinter.Comm10E, "Comm10E (105 x 241 mm, U.S. Common 10 Envelope)"),
-        (QtGui.QPrinter.DLE, "DLE (110 x 220 mm)"),
-        (QtGui.QPrinter.Executive, "Executive (7.5 x 10 inches, 191 x 254 mm)"),
-        (QtGui.QPrinter.Folio, "Folio (210 x 330 mm)"),
-        (QtGui.QPrinter.Ledger, "Ledger (432 x 279 mm)"),
-        (QtGui.QPrinter.Tabloid, "Tabloid (279 x 432 mm)"),
+        (QtPrintSupport.QPrinter.Letter, "Letter (8.5 x 11 inches, 216 x 279 mm)"),
+        (QtPrintSupport.QPrinter.Legal, "Legal (8.5 x 14 inches, 216 x 356 mm)"),
+        (QtPrintSupport.QPrinter.A0, "A0 (841 x 1189 mm)"),
+        (QtPrintSupport.QPrinter.A1, "A1 (94 x 841 mm)"),
+        (QtPrintSupport.QPrinter.A2, "A2 (420 x 594 mm)"),
+        (QtPrintSupport.QPrinter.A3, "A3 (297 x 420 mm)"),
+        (QtPrintSupport.QPrinter.A4, "A4 (210 x 297 mm, 8.26 x 11.69 inches)"),
+        (QtPrintSupport.QPrinter.A5, "A5 (148 x 210 mm)"),
+        (QtPrintSupport.QPrinter.A6, "A6 (105 x 148 mm)"),
+        (QtPrintSupport.QPrinter.A7, "A7 (74 x 105 mm)"),
+        (QtPrintSupport.QPrinter.A8, "A8 (52 x 74 mm)"),
+        (QtPrintSupport.QPrinter.A9, "A9 (37 x 52 mm)"),
+        (QtPrintSupport.QPrinter.B0, "B0 (1030 x 1456 mm)"),
+        (QtPrintSupport.QPrinter.B1, "B1 (728 x 1030 mm)"),
+        (QtPrintSupport.QPrinter.B2, "B2 (515 x 728 mm)"),
+        (QtPrintSupport.QPrinter.B3, "B3 (364 x 515 mm)"),
+        (QtPrintSupport.QPrinter.B4, "B4 (257 x 364 mm)"),
+        (QtPrintSupport.QPrinter.B5, "B5 (182 x 257 mm, 7.17 x 10.13 inches)"),
+        (QtPrintSupport.QPrinter.B6, "B6 (128 x 182 mm)"),
+        (QtPrintSupport.QPrinter.B7, "B7 (91 x 128 mm)"),
+        (QtPrintSupport.QPrinter.B8, "B8 (64 x 91 mm)"),
+        (QtPrintSupport.QPrinter.B9, "B9 (45 x 64 mm)"),
+        (QtPrintSupport.QPrinter.B10, "B10 (32 x 45 mm)"),
+        (QtPrintSupport.QPrinter.C5E, "C5E (163 x 229 mm)"),
+        (QtPrintSupport.QPrinter.Comm10E, "Comm10E (105 x 241 mm, U.S. Common 10 Envelope)"),
+        (QtPrintSupport.QPrinter.DLE, "DLE (110 x 220 mm)"),
+        (QtPrintSupport.QPrinter.Executive, "Executive (7.5 x 10 inches, 191 x 254 mm)"),
+        (QtPrintSupport.QPrinter.Folio, "Folio (210 x 330 mm)"),
+        (QtPrintSupport.QPrinter.Ledger, "Ledger (432 x 279 mm)"),
+        (QtPrintSupport.QPrinter.Tabloid, "Tabloid (279 x 432 mm)"),
 ]
 
 
@@ -162,9 +162,9 @@ def replace_russian_characeters(text):
     return modified_text
 
 
-class AddChordCommand( QtGui.QUndoCommand ):
+class AddChordCommand(QtWidgets.QUndoCommand):
     def __init__(self, song, chord):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.song = song
         self.chord = chord
     
@@ -175,9 +175,9 @@ class AddChordCommand( QtGui.QUndoCommand ):
         self.song._addChord(self.chord)
 
 
-class DeleteChordCommand( QtGui.QUndoCommand ):
+class DeleteChordCommand( QtWidgets.QUndoCommand ):
     def __init__(self, song, chord):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.song = song
         self.chord = chord
     
@@ -188,9 +188,9 @@ class DeleteChordCommand( QtGui.QUndoCommand ):
         self.song._deleteChord(self.chord)
 
 
-class ReplaceChordCommand( QtGui.QUndoCommand ):
+class ReplaceChordCommand( QtWidgets.QUndoCommand ):
     def __init__(self, song, prev_chord, new_chord):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         self.song = song
         self.prev_chord = prev_chord
         self.new_chord = new_chord
@@ -202,9 +202,9 @@ class ReplaceChordCommand( QtGui.QUndoCommand ):
         self.song._replaceChord(self.prev_chord, self.new_chord)
 
 
-class DeleteSongsCommand( QtGui.QUndoCommand ):
+class DeleteSongsCommand( QtWidgets.QUndoCommand ):
     def __init__(self, app, song_ids):
-        QtGui.QUndoCommand.__init__(self)
+        QtWidgets.QUndoCommand.__init__(self)
         
         self.app = app
         self.songs = []
@@ -340,6 +340,7 @@ class SongsTableModel(QtCore.QAbstractTableModel):
         
         self._data = []
         if self.app.curs:
+        
             # A songbook is currently open
             for row in self.app.curs.execute("SELECT id, number, title FROM songs ORDER BY id"):
                 rowobj = SongsTableRow( row[0], row[1], row[2] )
@@ -421,14 +422,14 @@ class SongsTableModel(QtCore.QAbstractTableModel):
         return [ song.id for song in self._data ]
 
 
-class SongsProxyModel(QtGui.QSortFilterProxyModel):
+class SongsProxyModel(QtCore.QSortFilterProxyModel):
     """ 
     Proxy model that allows showing/hiding rows in the songs table.
     """
 
     def __init__(self, app):
         self.app = app
-        QtGui.QSortFilterProxyModel.__init__(self, app.win)
+        QtCore.QSortFilterProxyModel.__init__(self, app.win)
 
     def filterAcceptsRow(self, sourceRow, sourceParent):
         model = self.sourceModel()
@@ -454,14 +455,18 @@ class SongsProxyModel(QtGui.QSortFilterProxyModel):
         leftData = self.sourceModel().data(left)
         rightData = self.sourceModel().data(right)
         
-        # Convert strings to floats:
-        leftDataFloat, leftOk = leftData.toDouble()
-        rightDataFloat, rightOk = rightData.toDouble()
-        if leftOk and rightOk:
-            return leftDataFloat < rightDataFloat
-        else:
-            # Non-number value ("NA", for example):
-            return leftData.toString() < rightData.toString()
+        return leftData< rightData
+        
+        #FIXME
+        
+        # # Convert strings to floats:
+        # leftDataFloat, leftOk = leftData
+        # rightDataFloat, rightOk = rightData
+        # if leftOk and rightOk:
+            # return leftDataFloat < rightDataFloat
+        # else:
+            # # Non-number value ("NA", for example):
+            # return leftData.toString() < rightData.toString()
         
 
 
@@ -572,7 +577,7 @@ class Song:
     
     def updateSongFromDatabase(self):
         """
-        Read this song from the database, and populate the instnces properties.
+        Read this song from the database, and populate the instances' properties.
         """
         
         # Read the song from the database:
@@ -584,7 +589,7 @@ class Song:
             # Create this prop
             self.app.curs.execute("ALTER TABLE songs ADD alt_key_note_id INTEGER")
             self.app.curs.commit()
-            print "Table songs: created alt_key_note_id and subtitle columns"
+            print("Table songs: created alt_key_note_id and subtitle columns")
             # Re-try once the missing columns have been added:
             row = self.app.curs.execute("SELECT number, title, subtitle, text, key_note_id, key_is_major, alt_key_note_id FROM songs WHERE id=%i" % self.id).fetchone()
         
@@ -594,7 +599,7 @@ class Song:
         if self.subtitle == None:
             self.subtitle = ""
 
-        all_text = unicode(row[3])
+        all_text = str(row[3])
         
         self.key_note_id = row[4] # Can be None or -1
         if self.key_note_id == None:
@@ -803,7 +808,7 @@ class Song:
 
     def getAllText(self):
         
-        song_text = unicode(self.doc.toPlainText())
+        song_text = str(self.doc.toPlainText())
         return song_text
         
 
@@ -902,7 +907,7 @@ class Song:
         formatting only if displayed with a mono-spaced (fixed-width) font.
         """
         
-        song_text = unicode()
+        song_text = str()
         self.updateSharpsOrFlats()
         
         #for linenum, line_text in enumerate(self.iterateLineTexts()):
@@ -979,7 +984,7 @@ class Song:
         all_text = self.getAllText()
         
         curr_char_num = 0
-        converted_text = unicode()
+        converted_text = str()
         
         if self.title:
             converted_text += "{title:%s}\n" % self.title
@@ -1158,11 +1163,11 @@ class Song:
 
 
 
-class CustomTextEdit(QtGui.QTextEdit):
+class CustomTextEdit(QtWidgets.QTextEdit):
     """
     """
     def __init__(self, app):
-        QtGui.QTextEdit.__init__(self, app.win)
+        QtWidgets.QTextEdit.__init__(self, app.win)
         self.app = app
         
         self.dragging_chord_orig_position = -1
@@ -1183,7 +1188,7 @@ class CustomTextEdit(QtGui.QTextEdit):
         if self.lyric_editor_mode:
             
             # Paint the lyrics text, selection rect, and cursor:
-            QtGui.QTextEdit.paintEvent(self, event)
+            QtWidgets.QTextEdit.paintEvent(self, event)
             
             # Paint the chords:
             if self.app.current_song:
@@ -1251,7 +1256,7 @@ class CustomTextEdit(QtGui.QTextEdit):
         """
         
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.leaveEvent(self, event)
+            QtWidgets.QTextEdit.leaveEvent(self, event)
         else:
             # Clear the hovering highlighting:
             self.app.hover_char_num = None
@@ -1263,13 +1268,13 @@ class CustomTextEdit(QtGui.QTextEdit):
     
     def undo(self):
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.undo(self)
+            QtWidgets.QTextEdit.undo(self)
         else:
             self.app.undo_stack.undo()
     
     def redo(self):
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.redo(self)
+            QtWidgets.QTextEdit.redo(self)
         else:
             self.app.undo_stack.redo()
     
@@ -1294,7 +1299,7 @@ class CustomTextEdit(QtGui.QTextEdit):
         """
         
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.mouseMoveEvent(self, event)
+            QtWidgets.QTextEdit.mouseMoveEvent(self, event)
             return
         
         localx = event.pos().x()
@@ -1346,7 +1351,7 @@ class CustomTextEdit(QtGui.QTextEdit):
         """
         
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.mousePressEvent(self, event)
+            QtWidgets.QTextEdit.mousePressEvent(self, event)
             return
         
         if event.button() == Qt.LeftButton:
@@ -1391,7 +1396,7 @@ class CustomTextEdit(QtGui.QTextEdit):
 
     def mouseReleaseEvent(self, event):
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.mouseReleaseEvent(self, event)
+            QtWidgets.QTextEdit.mouseReleaseEvent(self, event)
             return
 
         # Stop dragging of the chord (it's already in the correct position):
@@ -1416,7 +1421,7 @@ class CustomTextEdit(QtGui.QTextEdit):
         Called when mouse is DOUBLE-CLICKED in the song chords widget.
         """
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.mouseDoubleClickEvent(self, event)
+            QtWidgets.QTextEdit.mouseDoubleClickEvent(self, event)
             return
         
         if event.button() == Qt.LeftButton:
@@ -1438,7 +1443,7 @@ class CustomTextEdit(QtGui.QTextEdit):
     def keyPressEvent(self, event):
         
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.keyPressEvent(self, event)
+            QtWidgets.QTextEdit.keyPressEvent(self, event)
             return
         
         key = event.key()
@@ -1460,7 +1465,7 @@ class CustomTextEdit(QtGui.QTextEdit):
     
     def keyReleaseEvent(self, event):
         if self.lyric_editor_mode:
-            QtGui.QTextEdit.keyReleaseEvent(self, event)
+            QtWidgets.QTextEdit.keyReleaseEvent(self, event)
             return
         
         key = event.key()
@@ -1471,7 +1476,7 @@ class CustomTextEdit(QtGui.QTextEdit):
     
 
 
-class ChordDialog(QtGui.QDialog):
+class ChordDialog(QtWidgets.QDialog):
     """
     Dialog for allowing the user to set the chord note & type.
     """
@@ -1480,7 +1485,7 @@ class ChordDialog(QtGui.QDialog):
         self.win.connect(widget, QtCore.SIGNAL(signal_str), slot)
 
     def __init__(self, app):
-        QtGui.QDialog.__init__(self, app.win)
+        QtWidgets.QDialog.__init__(self, app.win)
 
         self.app = app
         # self.ui = uic.loadUi(chord_dialog_ui_file)
@@ -1537,7 +1542,7 @@ class ChordDialog(QtGui.QDialog):
             chord.chord_type_id = self.ui.chord_type_menu.currentIndex()
             # 0 (first item) will become -1 (invalid):
             chord.bass_note_id = self.ui.bass_menu.currentIndex() - 1
-            chord.marker = unicode(self.ui.marker_ef.text()) # NOTE Must convert QString to Python string
+            chord.marker = str(self.ui.marker_ef.text()) # NOTE Must convert QString to Python string
             chord.in_parentheses = self.ui.in_parentheses_box.isChecked()
             
             return True
@@ -1565,7 +1570,7 @@ class PdfOptions:
 
 
 
-class PdfDialog(QtGui.QDialog):
+class PdfDialog(QtWidgets.QDialog):
     """
     Dialog for allowing the user to set up printing and PDF export options.
     """
@@ -1574,10 +1579,10 @@ class PdfDialog(QtGui.QDialog):
         self.ui.connect(widget, QtCore.SIGNAL(signal_str), slot)
 
     def __init__(self, app):
-        QtGui.QDialog.__init__(self, app.win)
+        QtWidgets.QDialog.__init__(self, app.win)
 
         self.app = app
-        # self.ui = uic.loadUi(pdf_dialog_ui_file)
+        #self.ui = uic.loadUi(softchord_pdf_dialog_ui.ui)
         self.ui = softchord_pdf_dialog_ui.Ui_Dialog()
         self.ui.setupUi(self) 
         
@@ -1644,21 +1649,22 @@ class PdfDialog(QtGui.QDialog):
             
 
 
-class App( QtGui.QApplication ):
+class App(QtWidgets.QApplication):
     """
     The main application class.
     """
-    def c(self, widget, signal_str, slot):
-        self.win.connect(widget, QtCore.SIGNAL(signal_str), slot)
-        
+    
+    #Connect
+    def c(self, widget, signal_str, slot):          
+        getattr(widget, signal_str).connect(slot)
         self.doc_editor_offset = 10.0
     
     
     def __init__(self, args):
-        QtGui.QApplication.__init__(self, args) 
+        QtWidgets.QApplication.__init__(self, args) 
         
         # self.ui = uic.loadUi(script_ui_file)
-        self.win = QtGui.QMainWindow()
+        self.win = QtWidgets.QMainWindow()
         self.ui = softchord_main_window_ui.Ui_MainWindow()
         self.ui.setupUi(self.win) 
         
@@ -1670,7 +1676,7 @@ class App( QtGui.QApplication ):
         
         self.pdf_options = PdfOptions()
         
-        self.undo_stack = QtGui.QUndoStack()
+        self.undo_stack = QtWidgets.QUndoStack()
         self.undo_stack.canUndoChanged.connect(self.updateEditMenu)
         self.undo_stack.canRedoChanged.connect(self.updateEditMenu)
         self.focusChanged.connect(self.updateEditMenu)
@@ -1688,7 +1694,7 @@ class App( QtGui.QApplication ):
         self.chord_type_texts_dict = {}
         for id, print_text in enumerate(self.chord_type_prints):
             self.chord_type_texts_dict[print_text] = id
-            for alternative_name, official_name in alternative_type_names.iteritems():
+            for alternative_name, official_name in alternative_type_names.items():
                 if print_text == official_name:
                     self.chord_type_texts_dict[alternative_name] = id
         
@@ -1711,8 +1717,8 @@ class App( QtGui.QApplication ):
         self.ui.songs_view.setSortingEnabled(True)
 
         self.ui.songs_view.horizontalHeader().setStretchLastSection(True)
-        self.ui.songs_view.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        self.ui.songs_view.setSelectionMode(QtGui.QAbstractItemView.ExtendedSelection)
+        self.ui.songs_view.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
+        self.ui.songs_view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.ui.songs_view.selectionModel().selectionChanged.connect( self.songsSelectionChangedCallback )
         
         self.ui.song_filter_ef.textEdited.connect( self.songFilterEdited )
@@ -1730,14 +1736,14 @@ class App( QtGui.QApplication ):
         self.ui.lyric_editor_layout.removeWidget(self.ui.chord_scroll_area)
         self.ui.chord_scroll_area.hide()
         
-        self.editor.setLineWrapMode(int(QtGui.QTextEdit.NoWrap))
-        self.print_editor.setLineWrapMode(int(QtGui.QTextEdit.NoWrap))
+        self.editor.setLineWrapMode(int(QtWidgets.QTextEdit.NoWrap))
+        self.print_editor.setLineWrapMode(int(QtWidgets.QTextEdit.NoWrap))
         self.editor.textChanged.connect( self.lyricsTextChanged )
         
-        self.c( self.ui.transpose_up_button, "clicked()", self.transposeUp )
-        self.c( self.ui.transpose_down_button, "clicked()", self.transposeDown )
-        self.c( self.ui.new_song_button, "clicked()", self.createNewSong )
-        self.c( self.ui.delete_song_button, "clicked()", self.deleteSelectedSongs )
+        self.c( self.ui.transpose_up_button, "clicked", self.transposeUp )
+        self.c( self.ui.transpose_down_button, "clicked", self.transposeDown )
+        self.c( self.ui.new_song_button, "clicked", self.createNewSong )
+        self.c( self.ui.delete_song_button, "clicked", self.deleteSelectedSongs )
 
         self.ui.song_num_ef.textEdited.connect( self.currentSongNumberEdited )
         self.ui.song_title_ef.textEdited.connect( self.currentSongTitleEdited )
@@ -1745,8 +1751,8 @@ class App( QtGui.QApplication ):
 
         self.ui.song_num_ef.setValidator( QtGui.QIntValidator(0, 1000000000, self.win) )
         self.ignore_song_key_changed = False
-        self.c( self.ui.song_key_menu, "currentIndexChanged(int)", self.currentSongKeyChanged )
-        self.c( self.ui.song_alt_key_menu, "currentIndexChanged(int)", self.currentSongAltKeyChanged )
+        self.c( self.ui.song_key_menu, "currentIndexChanged", self.currentSongKeyChanged )
+        self.c( self.ui.song_alt_key_menu, "currentIndexChanged", self.currentSongAltKeyChanged )
         
         # Menu actions:
         self.ui.actionNewSongbook.triggered.connect(self.newSongbook)
@@ -1756,8 +1762,8 @@ class App( QtGui.QApplication ):
         self.ui.actionAppendSongbook.triggered.connect(self.appendSongbookSelected)
         
         self.ui.actionPrint.triggered.connect( self.printSelectedSongs )
-        self.c( self.ui.actionQuit, "triggered()", self.win.close )
-        self.c( self.ui.actionNewSong, "triggered()", self.createNewSong )
+        self.c( self.ui.actionQuit, "triggered", self.win.close )
+        self.c( self.ui.actionNewSong, "triggered", self.createNewSong )
         
         self.ui.actionDeleteSongs.triggered.connect( self.deleteSelectedSongs )
         self.ui.actionRemoveTrailingSpaces.triggered.connect( self.removeTrailingSpaces )
@@ -1765,10 +1771,10 @@ class App( QtGui.QApplication ):
         self.ui.actionRenumberSongs.triggered.connect(self.renumberAllSongs)
 
         self.ui.actionSetID.triggered.connect( self.setSongDatabaseId )
-        self.c( self.ui.actionExportSinglePdf, "triggered()", self.exportToSinglePdf )
+        self.c( self.ui.actionExportSinglePdf, "triggered", self.exportToSinglePdf )
         self.ui.actionExportSongToPdf.triggered.connect( self.exportToSinglePdf )
         self.ui.actionExportMultiplePdfs.triggered.connect( self.exportToMultiplePdfs )
-        self.c( self.ui.actionExportText, "triggered()", self.exportToText )
+        self.c( self.ui.actionExportText, "triggered", self.exportToText )
         
         self.ui.actionExportChordPro.triggered.connect( self.exportToChordPro )
         self.ui.actionImportText.triggered.connect( self.browseForTextFile )
@@ -1893,11 +1899,11 @@ class App( QtGui.QApplication ):
         if event.type() == QtCore.QEvent.FileOpen:
             # Cast as QFileOpenEvent!
             #self.openSongbook
-            filename = unicode( event.file() )
+            filename = str( event.file() )
             if filename.endswith(".songbook"):
                 self.setCurrentSongbook(filename)
             return True
-        return QtGui.QApplication.event(self, event)
+        return QtWidgets.QApplication.event(self, event)
 
 
 
@@ -2147,12 +2153,14 @@ class App( QtGui.QApplication ):
     def updateEditMenu(self, ignored1=None, ignored2=None):
         
         focus_widget = self.focusWidget() # FIXME implement this properly
-
-        enable_paste = not self.clipboard.text().isEmpty()
+       
+        if not self.clipboard.text:
+            enable_paste = self.clipboard.text
         
         if self.current_song:
             if self.editor.lyric_editor_mode:
                 # Currently editing the lyrics (QTextEdit)
+                #FIXME
                 # FIXME what if the lyrics editor can undo?
                 # FIXME We need to attach slots to QTextEdit.undoAvailable() and redoAvailable() signals
                 undo_possible = False
@@ -2170,7 +2178,7 @@ class App( QtGui.QApplication ):
         
         self.ui.actionUndo.setEnabled(undo_possible)
         self.ui.actionRedo.setEnabled(redo_possible)
-        self.ui.actionPaste.setEnabled(enable_paste)
+        #self.ui.actionPaste.setEnabled(enable_paste)#FIXME
     
 
     def clearUndoStack(self):
@@ -2179,15 +2187,15 @@ class App( QtGui.QApplication ):
     
     def warning(self, text):
         """ Display a warning dialog box with the given text """
-        QtGui.QMessageBox.warning(self.win, "Warning", text)
+        QtWidgets.QMessageBox.warning(self.win, "Warning", text)
 
     def info(self, text):
         """ Display an information dialog box with the given text """
-        QtGui.QMessageBox.information(self.win, "Information", text)
+        QtWidgets.QMessageBox.information(self.win, "Information", text)
     
     def error(self, text):
         """ Display an error dialog box with the given text """
-        QtGui.QMessageBox.warning(self.win, "Error", text)
+        QtWidgets.QMessageBox.warning(self.win, "Error", text)
 
     def setWaitCursor(self):
         """ Set the mouse cursor to the watch """
@@ -2309,7 +2317,7 @@ class App( QtGui.QApplication ):
          
         self.ui.actionPrint.setEnabled( songs_present )
         
-        # FIXME instead link it to either the lyric editror select-all, or the songs table
+        # FIXME instead link it to either the lyric editor select-all, or the songs table
         self.ui.actionSelectAll.setEnabled(False)
         
         # Whether there is an open songbook:
@@ -2427,7 +2435,7 @@ class App( QtGui.QApplication ):
         
         self.ignore_song_text_changed = True
         
-        song_text = unicode(self.editor.toPlainText())
+        song_text = str(self.editor.toPlainText())
         
         # Compare the new text to the previous text:
         
@@ -2566,7 +2574,7 @@ class App( QtGui.QApplication ):
         # Make a copy:
         new_font = QtGui.QFont(self.chords_font)
         
-        new_font, ok = QtGui.QFontDialog.getFont(new_font, self.win)
+        new_font, ok = QtWidgets.QFontDialog.getFont(new_font, self.win)
         if ok:
             self.chords_font_size = new_font.pointSizeF()
             self.chords_font = new_font
@@ -2582,7 +2590,7 @@ class App( QtGui.QApplication ):
         # Make a copy:
         new_font = QtGui.QFont(self.lyrics_font)
 
-        new_font, ok = QtGui.QFontDialog.getFont(new_font, self.win)
+        new_font, ok = QtWidgets.QFontDialog.getFont(new_font, self.win)
         if ok:
             self.lyrics_font_size = new_font.pointSizeF()
             self.lyrics_font = new_font
@@ -2627,15 +2635,15 @@ class App( QtGui.QApplication ):
             self.error("There are no songs to print")
             return
         
-        printer = QtGui.QPrinter()
+        printer = QtPrintSupport.QPrinter()
         printer.setFullPage(True)
-        printer.setPageSize(QtGui.QPrinter.Letter)
-        printer.setOrientation(QtGui.QPrinter.Portrait)
+        printer.setPageSize(QtPrintSupport.QPrinter.Letter)
+        printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
         
         painter = QtGui.QPainter()
         
-        print_dialog = QtGui.QPrintDialog(printer, self.win)
-        if print_dialog.exec_() == QtGui.QDialog.Accepted:
+        print_dialog = QtPrintSupport.QPrintDialog(printer, self.win)
+        if print_dialog.exec_() == QtPrintSupport.QDialog.Accepted:
             ok = PdfDialog(self).display(self.pdf_options, single_pdf_export=True)
             if not ok:
                 return
@@ -2648,7 +2656,7 @@ class App( QtGui.QApplication ):
             try:
                 num_printed = self.printSongsToPrinter(song_ids, printer, "Printing...")
                 # In case of an IOError, num_printed will be 0.
-            except Exception, err:
+            except(Exception, err):
                 self.error( "Error printing:\n\n%s " % traceback.format_exc() )
     
     
@@ -2659,7 +2667,7 @@ class App( QtGui.QApplication ):
         Will display an error dialog on error.
         """
         
-        progress = QtGui.QProgressDialog(progress_message, "Abort", 0, len(song_ids), self.win)
+        progress = QtWidgets.QProgressDialog(progress_message, "Abort", 0, len(song_ids), self.win)
         progress.setWindowModality(Qt.WindowModal)
         # Open the progress dialog right away:
         progress.setMinimumDuration(0)
@@ -2753,11 +2761,11 @@ class App( QtGui.QApplication ):
             
             self.reportScaleRatio(min_scale_ratio, len(song_ids))
 
-        except IOError, err:
+        except(IOError, err):
             self.error(str(err))
             return 0
         
-        except Exception, err:
+        except(Exception, err):
             raise
         
         progress.setValue(len(song_ids))
@@ -2888,43 +2896,43 @@ class App( QtGui.QApplication ):
                 return
             
             if len(song_ids) == 1:
-                suggested_path = os.path.join( unicode(QtCore.QDir.home().path()), unicode(self.current_song.title) + ".pdf" )
+                suggested_path = os.path.join( str(QtCore.QDir.home().path()), str(self.current_song.title) + ".pdf" )
             else:
                 suggested_path = QtCore.QDir.home().path()
             
-            pdf_file = QtGui.QFileDialog.getSaveFileName(self.win,
+            pdf_file = QtWidgets.QFileDialog.getSaveFileName(self.win,
                         "Save PDF file as:",
                         suggested_path,
                         "PDF format (*.pdf)",
             )
-        
-            if not pdf_file: 
+            
+            if not pdf_file[0]: 
                 # User cancelled
                 return
         
         self.setWaitCursor()
-        try:
-            printer = QtGui.QPrinter()
+        try:  
+            printer = QtPrintSupport.QPrinter()
             if self.pdf_options.print_4_per_page:
                 page_size = QtCore.QSizeF( self.pdf_options.page_width * 2.0, self.pdf_options.page_height * 2.0 )
             else:
                 page_size = QtCore.QSizeF( self.pdf_options.page_width, self.pdf_options.page_height )
-            printer.setPaperSize( page_size, QtGui.QPrinter.Inch)
+            printer.setPaperSize( page_size, QtPrintSupport.QPrinter.Inch)
             printer.setFullPage(True) # considers whole page instead of only printable area.
-            printer.setOrientation(QtGui.QPrinter.Portrait)
-            printer.setOutputFileName(pdf_file)
+            printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
+            printer.setOutputFileName(pdf_file[0])
             
             if sys.platform == 'win32':
-                printer.setOutputFormat(QtGui.QPrinter.PdfFormat) 
+                printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat) 
             elif sys.platform == 'darwin':
                 # DON'T set it to NativeFormat, as that messes
                 # page size on export
-                printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
+                printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat)
             
             num_printed = self.printSongsToPrinter(song_ids, printer, "Exporting to PDF...")
             # On IOError, num_printed will be 0.
 
-        except Exception, err:
+        except Exception as err:
             self.restoreCursor()
             self.error( "Error exporting:\n\n%s " % traceback.format_exc() )
         else:
@@ -2949,8 +2957,8 @@ class App( QtGui.QApplication ):
         if not ok:
             return
         
-        suggested_dir = unicode(QtCore.QDir.home().path())
-        dir = QtGui.QFileDialog.getExistingDirectory(self.win,
+        suggested_dir = str(QtCore.QDir.home().path())
+        dir = QtWidgets.QFileDialog.getExistingDirectory(self.win,
                     "Save PDF file in directory:",
                     suggested_dir,
         )
@@ -2958,7 +2966,7 @@ class App( QtGui.QApplication ):
             # User cancelled
             return
         
-        progress = QtGui.QProgressDialog("Exporting to PDFs...", "Abort", 0, len(song_ids), self.win)
+        progress = QtWidgets.QProgressDialog("Exporting to PDFs...", "Abort", 0, len(song_ids), self.win)
         progress.setWindowModality(Qt.WindowModal)
         # Open the progress dialog right away:
         progress.setMinimumDuration(0)
@@ -2976,25 +2984,25 @@ class App( QtGui.QApplication ):
             self.print_editor.setDocument(song.doc)
             # NOTE: Messing with this stuff may cause the app to crash on Windows (compiled)
             
-            pdf_file = os.path.join( unicode(dir), unicode(song.title) + ".pdf" )
+            pdf_file = os.path.join( str(dir), str(song.title) + ".pdf" )
             
             
             try:
-                printer = QtGui.QPrinter()
+                printer = QtPrintSupport.QPrinter()
                 if self.pdf_options.print_4_per_page:
                     page_size = QtCore.QSizeF( self.pdf_options.page_width * 2.0, self.pdf_options.page_height * 2.0 )
                 else:
                     page_size = QtCore.QSizeF( self.pdf_options.page_width, self.pdf_options.page_height )
-                printer.setPaperSize( page_size, QtGui.QPrinter.Inch)
+                printer.setPaperSize( page_size, QtPrintSupport.QPrinter.Inch)
                 printer.setFullPage(True) # considers whole page instead of only printable area.
-                printer.setOrientation(QtGui.QPrinter.Portrait)
+                printer.setOrientation(QtPrintSupport.QPrinter.Portrait)
                 printer.setOutputFileName(pdf_file)
                 
                 # OLD: printer.setOutputFormat(QtGui.QPrinter.PdfFormat)
                 if sys.platform == 'win32':
-                    printer.setOutputFormat(QtGui.QPrinter.PdfFormat) 
+                    printer.setOutputFormat(QtPrintSupport.QPrinter.PdfFormat) 
                 elif sys.platform == 'darwin':
-                    printer.setOutputFormat(QtGui.QPrinter.NativeFormat) 
+                    printer.setOutputFormat(QtPrintSupport.QPrinter.NativeFormat) 
                 
                 painter = QtGui.QPainter()
                 if not painter.begin(printer):
@@ -3007,7 +3015,7 @@ class App( QtGui.QApplication ):
                 
                 painter.end()
             
-            except Exception, err:
+            except Exception as err:
                 self.restoreCursor()
                 self.error("Error generating PDF:\n%s" % str(err))
                 raise
@@ -3061,12 +3069,12 @@ class App( QtGui.QApplication ):
         if self.selected_char_num == None or not self.current_song:
             return
         
-        text = unicode(self.clipboard.text())
+        text = str(self.clipboard.text())
         
         try:
             converted_chord = self.convertChordFromString(text)
-        except ValueError, err:
-            print "not a chord"
+        except(ValueError, err):
+            print("not a chord")
             return 
         
         (marker, note_id, type_id, bass_id, in_parentheses) = converted_chord
@@ -3104,10 +3112,6 @@ class App( QtGui.QApplication ):
         
         song_text = self.current_song.getAsText()
         
-        # Fix the line endings that that they work on all OSes, including Windows NotePad:
-        song_text = song_text.replace('\n', '\r\n')
-        # FIXME is that needed?
-        
         self.clipboard.setText(song_text)
         
         self.restoreCursor()
@@ -3129,29 +3133,25 @@ class App( QtGui.QApplication ):
             return
         
         if not text_file:
-            suggested_path = os.path.join( unicode(QtCore.QDir.home().path()), unicode(self.current_song.title) + ".txt" )
+            suggested_path = os.path.join( str(QtCore.QDir.home().path()), str(self.current_song.title) + ".txt" )
             
-            text_file = QtGui.QFileDialog.getSaveFileName(self.win,
+            text_file = QtWidgets.QFileDialog.getSaveFileName(self.win,
                     "Save text file as:",
                     suggested_path,
                     "Text format (*.txt)",
             )
-        if text_file:
+
+        if text_file[0]:
             self.setWaitCursor()
             try:
-                fh = codecs.open( unicode(text_file), 'w', encoding='utf_8_sig')
+                fh = open(text_file[0], 'w', encoding='utf-8')
                 
                 for song_index, song_id in enumerate(self.getSelectedSongIds()):
                     # NOTE for now there will always be only one song exported.
                     song = Song(self, song_id)
                     
-                    # Encode the unicode string as UTF-8 before writing to file:
+                    # Encode the str string as UTF-8 before writing to file:
                     song_text = song.getAsText()
-
-                    # Fix the line endings that that they work on all OSes, including Windows NotePad:
-                    song_text = song_text.replace('\n', '\r\n')
-                    
-                    #song_text = song.getAsText().encode('utf_8_sig')
                     fh.write(song_text)
                 
                 fh.close()
@@ -3176,29 +3176,24 @@ class App( QtGui.QApplication ):
             return
         
         if not filename:
-            suggested_path = os.path.join( unicode(QtCore.QDir.home().path()), unicode(self.current_song.title) + ".chordpro" )
+            suggested_path = os.path.join( str(QtCore.QDir.home().path()), str(self.current_song.title) + ".chordpro" )
             
-            filename = QtGui.QFileDialog.getSaveFileName(self.win,
+            filename = QtWidgets.QFileDialog.getSaveFileName(self.win,
                     "Save text file as:",
                     suggested_path,
                     "ChordPro format (*.chordpro)",
             )
-        if filename:
+        if filename[0]:
             self.setWaitCursor()
             try:
-                fh = codecs.open( unicode(filename), 'w', encoding='utf_8_sig')
+                fh = open(filename[0], 'w', encoding='utf-8')
                 
                 for song_index, song_id in enumerate(self.getSelectedSongIds()):
                     # NOTE for now there will always be only one song exported.
                     song = Song(self, song_id)
                     
-                    # Encode the unicode string as UTF-8 before writing to file:
+                    # Encode the str string as UTF-8 before writing to file:
                     song_text = song.getAsChordProText()
-                    
-                    # Fix the line endings that that they work on all OSes, including Windows NotePad:
-                    song_text = song_text.replace('\n', '\r\n')
-                    
-                    #song_text = song.getAsText().encode('utf_8_sig')
                     fh.write(song_text)
                 
                 fh.close()
@@ -3212,7 +3207,7 @@ class App( QtGui.QApplication ):
         Called when the user modifies the selected song's title.
         """
         if self.current_song:
-            new_title = unicode(new_title).strip() # Remove any EOL characters, etc.
+            new_title = str(new_title).strip() # Remove any EOL characters, etc.
             self.current_song.title = new_title
             self.setWaitCursor()
             try:
@@ -3238,7 +3233,7 @@ class App( QtGui.QApplication ):
         if not self.current_song:
             raise ValueError("No current song")
         
-        new_note_str = unicode(new_note_str)
+        new_note_str = str(new_note_str)
         
         self.current_song.subtitle = new_note_str
         self.setWaitCursor()
@@ -3420,12 +3415,12 @@ class App( QtGui.QApplication ):
         Display a prompt dialog window with specified text.
         Returns True if first button (default OK) is pressed, False otherwise.
         """
-        mbox = QtGui.QMessageBox(self.win)
+        mbox = QtWidgets.QMessageBox(self.win)
         mbox.setText(msg)
         mbox.setWindowTitle(title)
-        mbox.setIcon(QtGui.QMessageBox.Question)
-        b1 = mbox.addButton(button1, QtGui.QMessageBox.ActionRole)
-        b2 = mbox.addButton(button2, QtGui.QMessageBox.RejectRole)
+        mbox.setIcon(QtWidgets.QMessageBox.Question)
+        b1 = mbox.addButton(button1, QtWidgets.QMessageBox.ActionRole)
+        b2 = mbox.addButton(button2, QtWidgets.QMessageBox.RejectRole)
         mbox.exec_()
         return ( mbox.clickedButton() == b1 )
     
@@ -3439,7 +3434,7 @@ class App( QtGui.QApplication ):
         
         all_song_ids = self.songs_model.getAllSongIds()
         
-        new_id, ok = QtGui.QInputDialog.getInteger(self.win, "softChord", "Enter a new ID for this song:", curr_id, 1)
+        new_id, ok = QtWidgets.QInputDialog.getInt(self.win, "softChord", "Enter a new ID for this song:", curr_id, 1)
         if not ok or new_id == curr_id:
             # User cancelled or selected same ID
             return 
@@ -3633,7 +3628,7 @@ class App( QtGui.QApplication ):
             if chord_rect:
                 self.drawChord(painter, chord_rect, chord_text)
             else:
-                print 'no chord rect!'
+                print('no chord rect!')
         
         
         
@@ -3940,9 +3935,14 @@ class App( QtGui.QApplication ):
         """
         Lets the user select a ChordPro file to import.
         """
+        
+        if self.current_songbook_filename == None:
+            self.warning("Please open/create a song book first")
+            return
+            
         if not filename:
             filter_string = "ChordPro format (%s)" % ' '.join( ['*'+ext for ext in chordpro_extensions] )
-            chordpro_files = QtGui.QFileDialog.getOpenFileNames(self.win,
+            chordpro_files = QtWidgets.QFileDialog.getOpenFileNames(self.win,
                     "Select a ChordPro file to import",
                     QtCore.QDir.home().path(), # initial dir
                     filter_string,
@@ -3954,10 +3954,13 @@ class App( QtGui.QApplication ):
             self.setWaitCursor()
             try:
                 for filename in chordpro_files:
-                    # "rU" makes sure that the line endings are handled properly:
-                    file_text = codecs.open( unicode(filename).encode('utf-8'), 'rU', encoding='utf_8_sig').read()
+
+                    if filename:
+                        with open(filename[0], 'r', encoding='utf-8') as f:
+                            file_text = f.read()
+                            self.importSongFromChordProText(file_text)
+                            break#Only read the filename, not the ChordPro format
                     
-                    self.importSongFromChordProText(file_text)
             finally:
                 self.restoreCursor()
     
@@ -3968,7 +3971,7 @@ class App( QtGui.QApplication ):
         """
         
         text = self.clipboard.text()
-        self.ui.actionPasteAsNewSong.setEnabled(not text.isEmpty())
+        self.ui.actionPasteAsNewSong.setEnabled(not text)
         self.updateEditMenu()
     
     
@@ -3982,10 +3985,10 @@ class App( QtGui.QApplication ):
             return
         
         self.setWaitCursor()
-        text = unicode(self.clipboard.text())
+        text = str(self.clipboard.text())
         try:
             self.importSongFromText(text)
-        except Exception, err:
+        except Exception as err:
             self.restoreCursor()
             self.error( "Error parsing the text:\n\n%s " % traceback.format_exc() )
         else:
@@ -3996,7 +3999,7 @@ class App( QtGui.QApplication ):
         """
         Lets the user select a text file to import.
         """
-        text_files = QtGui.QFileDialog.getOpenFileNames(self.win,
+        text_files = QtWidgets.QFileDialog.getOpenFileNames(self.win,
                 "Select a text file to import",
                 QtCore.QDir.home().path(), # initial dir
                 "Text format (*.txt *.text)", ###### *.textClipping)", # *.textClipping is used on MacOSX
@@ -4006,23 +4009,28 @@ class App( QtGui.QApplication ):
     
 
     def importTextFiles(self, text_files):
+        
+        if self.current_songbook_filename == None:
+            self.warning("Please open/create a song book first")
+            return
+            
         self.setWaitCursor()
         try:
             for filename in text_files:
-                # Convert QString to a Python string:
-                filename = unicode(filename)
-                
-                song_title = os.path.splitext(os.path.basename(filename))[0]
-                
-                # "rU" makes sure that the line endings are handled properly:
-                text = codecs.open( filename, 'rU', encoding='utf_8_sig').read()
+                if filename:
+                    song_title = os.path.basename(filename[0])
+                    
+                    with open(filename[0], 'r', encoding='utf-8') as f:
+                        text = f.read()
+                        try:
+                            self.importSongFromText(text, song_title)
+                            break
+                        except(Exception, err):
+                            self.restoreCursor()
+                            self.error( "Error parsing the text:\n\n%s " % traceback.format_exc() )
+                            break                            
 
-                try:
-                    self.importSongFromText(text, song_title)
-                except Exception, err:
-                    self.restoreCursor()
-                    self.error( "Error parsing the text:\n\n%s " % traceback.format_exc() )
-                    break
+
         finally:
             self.restoreCursor()
     
@@ -4139,21 +4147,21 @@ class App( QtGui.QApplication ):
                 else:
                     try:
                         converted_chord = self.convertChordFromString(word)
-                    except ValueError, err:
+                    except Exception as err:
                         tmp_warnings.append( '  WARNING: %s; chord: "%s"' % (str(err), word) )
                         num_non_chords += 1
                     else:
                         chord_middle_char = (word_start + word_end) // 2
                         num_chords += 1
                         tmp_chords[chord_middle_char] = converted_chord
-                        char_num += 6
+                        char_num += 6                       
                 
 
             if num_chords > num_non_chords:
                 # This is a chords line
                 prev_chords = tmp_chords
                 for warning_str in tmp_warnings:
-                    print warning_str.encode('utf-8')
+                    print(warning_str.encode('utf-8'))
             else:
                 # This is a lyrics line
                 if prev_chords:
@@ -4191,7 +4199,7 @@ class App( QtGui.QApplication ):
         line_start_char_num = 0
         for lyrics, chords_dict in song_lines:
             global_song_text += lyrics + '\n'
-            for line_char_num, chord in chords_dict.iteritems():
+            for line_char_num, chord in chords_dict.items():
                 song_char_num = line_char_num + line_start_char_num
                 global_song_chords[song_char_num] = chord
             
@@ -4214,7 +4222,7 @@ class App( QtGui.QApplication ):
         else:
             song_id = row[0]+1
         
-        song_title = unicode(song_title)
+        song_title = str(song_title)
         
         self.curs.execute("INSERT INTO songs (id, number, title, subtitle, text, key_note_id, key_is_major, alt_key_note_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             (song_id, song_num, song_title, song_subtitle, song_text, key_note_id, key_is_major, alt_key_note_id) )
@@ -4258,7 +4266,7 @@ class App( QtGui.QApplication ):
         # Add song's chords (if any):
         chord_id = None # So that _importChord() assigned a new ID to the new chord
         if song_chords:
-            for song_char_num, chord in song_chords.iteritems():
+            for song_char_num, chord in song_chords.items():
                 (marker, note_id, type_id, bass_id, in_parentheses) = chord
                 
                 chord_id = self._importChord(song_id, song_char_num, note_id, type_id, bass_id, marker, in_parentheses, chord_id)
@@ -4336,7 +4344,7 @@ class App( QtGui.QApplication ):
             for char_num, chord_text in line_chords:
                 try:
                     converted_chord = self.convertChordFromString(chord_text)
-                except ValueError, err:
+                except(ValueError, err):
                     tmp_warnings.append( 'WARNING: %s CHORD "%s"' % (str(err), word.encode('utf-8')) )
                 else:
                     chords_dict[char_num] = converted_chord
@@ -4345,7 +4353,7 @@ class App( QtGui.QApplication ):
 
 
         for warning_str in tmp_warnings:
-            print '  ', warning_str
+            print('  ', warning_str)
         
         
         # Combine all lines together:
@@ -4354,7 +4362,7 @@ class App( QtGui.QApplication ):
         line_start_char_num = 0
         for lyrics, chords_dict in song_lines:
             global_song_text += lyrics + '\n'
-            for line_char_num, chord in chords_dict.iteritems():
+            for line_char_num, chord in chords_dict.items():
                 song_char_num = line_char_num + line_start_char_num
                 global_song_chords[song_char_num] = chord
             
@@ -4446,7 +4454,6 @@ class App( QtGui.QApplication ):
             raise ValueError("Unkown chord type")
         
         return (marker, note_id, type_id, bass_id, in_parentheses)
-
     
     def setCurrentSongbook(self, filename):
         self.ui.songs_view.selectionModel().clearSelection()
@@ -4462,10 +4469,12 @@ class App( QtGui.QApplication ):
             self.curs = None
             self.win.setWindowTitle("softChord")
         else:
-            #self.info('Database: %s; exists: %s' % (songbook_file, os.path.isfile(filename)))
-            self.curs = sqlite3.connect(filename)
-            songbook_name = os.path.splitext(os.path.basename(filename))[0]
-            self.win.setWindowTitle("softChord - %s" % songbook_name)
+            #DEBUG
+            #self.info('Database: %s; exists: %s' % (filename[0], os.path.isfile(filename[0])))
+            
+            self.curs = sqlite3.connect(filename[0])
+            songbook_name = os.path.splitext(os.path.basename(filename[0]))
+            self.win.setWindowTitle("softChord - %s" % songbook_name[0])
         
         self.songs_model.updateFromDatabase()
         self.updateStates()
@@ -4478,12 +4487,12 @@ class App( QtGui.QApplication ):
         
         self.setWaitCursor()
         try:
-            # This step can't be undoed:
+            # This step can't be undone:
             self.clearUndoStack()
 
             self.ui.songs_view.selectionModel().clearSelection()
             
-            curs2 = sqlite3.connect(filename)
+            curs2 = sqlite3.connect(filename[0])
             
             chord_id = None # So that _importChord() assigned a new ID to the new chord
             
@@ -4506,32 +4515,40 @@ class App( QtGui.QApplication ):
     
 
     def newSongbook(self):
-        songbook_file = QtGui.QFileDialog.getSaveFileName(self.win,
-                    "Save songbook as:",
+        songbook_file = QtWidgets.QFileDialog.getSaveFileName(self.win,
+                    tr("Save songbook as:"),
                     QtCore.QDir.home().path(), # initial dir
-                    "Songbook format (*.songbook)",
+                    tr("Songbook format (*.songbook)"),
         )
-        if songbook_file:
+        
+        if songbook_file[0]:
+        
             # Overwrite a previous songbook (if any):
-            if os.path.isfile(songbook_file):
-                os.remove(songbook_file)
+            if os.path.isfile(songbook_file[0]):
+                if (songbook_file == self.current_songbook_filename):
+                    self.warning("Must close current songbook first!")
+                    return
+                os.remove(songbook_file[0])
 
-            # Open an empty satabase:
-            self.curs = sqlite3.connect(unicode(songbook_file))
+            
+            # Open an empty database:
+            self.curs = sqlite3.connect(str(songbook_file[0]))
 
             self.curs.execute("CREATE TABLE song_chord_link(id INTEGER PRIMARY KEY, song_id INTEGER, character_num INTEGER, note_id INTEGER, chord_type_id INTEGER, bass_note_id INTEGER, marker TEXT, in_parentheses INTEGER)")
             self.curs.execute("CREATE TABLE songs (id INTEGER PRIMARY KEY, number INTEGER, text TEXT, title TEXT, subtitle TEXT, key_note_id INTEGER, key_is_major INTEGER, alt_key_note_id INTEGER)")
-            self.setCurrentSongbook( unicode(songbook_file) )
+            
+            self.setCurrentSongbook(songbook_file)
         
     
     def openSongbook(self):
-        songbook_file = QtGui.QFileDialog.getOpenFileName(self.win,
+        songbook_file = QtWidgets.QFileDialog.getOpenFileName(self.win,
                 "Select a songbook to open",
                 QtCore.QDir.home().path(), # initial dir
                 "Songbook format (*.songbook)",
         )
-        if songbook_file:
-            self.setCurrentSongbook( unicode(songbook_file) )
+        
+        if songbook_file[0]:
+            self.setCurrentSongbook(songbook_file)
     
     def closeSongbook(self):
         if self.current_song:
@@ -4546,34 +4563,35 @@ class App( QtGui.QApplication ):
             self.setCurrentSong(None)
         
         if self.current_songbook_filename == None:
-            suggested_path = os.path.join( unicode(QtCore.QDir.home().path()), "My Songbook.songbook" )
+            suggested_path = os.path.join(QtCore.QDir.home().path())
         else:
-            suggested_path = self.current_songbook_filename
+            suggested_path = self.current_songbook_filename[0]
         
         new_songbook_file = None
+        
         while True:
-            new_songbook_file = QtGui.QFileDialog.getSaveFileName(self.win,
-                        "Save songbook as:",
-                        suggested_path,
-                        "Songbook foramt (*.songbook)",
+            new_songbook_file = QtWidgets.QFileDialog.getSaveFileName(self.win,
+                        tr("Save songbook as:"),
+                        str(suggested_path),
+                        tr("Songbook format (*.songbook)"),
             )
             if not new_songbook_file:
                 break
-            new_songbook_file = unicode(new_songbook_file)
-            if os.path.abspath(new_songbook_file) == os.path.abspath(self.current_songbook_filename):
+
+            if os.path.abspath(new_songbook_file[0]) == os.path.abspath(self.current_songbook_filename[0]):
                 self.warning("Please select a new location for the new songbook")
             else:
                 break
         
-        if new_songbook_file:
+        if new_songbook_file[0]:
             # User did not cancel
 
-            try:
-                shutil.copyfile(self.current_songbook_filename, new_songbook_file)
-            except Exception, err:
-                self.error("Could save the songbook to a new location.\n\nException: %s" % err)
+             try:
+                 shutil.copyfile(self.current_songbook_filename[0], (new_songbook_file[0]))
+             except Exception as err:
+                 self.error("Could save the songbook to a new location.\n\nException: %s" % err)
 
-            self.setCurrentSongbook(new_songbook_file)
+             self.setCurrentSongbook(new_songbook_file)
         
             # FIXME re-open the current song
 
@@ -4583,13 +4601,13 @@ class App( QtGui.QApplication ):
         Append a user-selected songbook to the currently opened songbook.
         """
 
-        songbook_file = QtGui.QFileDialog.getOpenFileName(self.win,
+        songbook_file = QtWidgets.QFileDialog.getOpenFileName(self.win,
                 "Select a songbook to append",
                 QtCore.QDir.home().path(), # initial dir
                 "Songbook format (*.songbook)",
         )
         if songbook_file:
-            self.appendSongbookFile( unicode(songbook_file) )
+            self.appendSongbookFile(songbook_file)
     
 
 
@@ -4602,8 +4620,8 @@ def main():
     app = App(sys.argv)
     #print 'applicationDirPath():', app.applicationDirPath()
     #print 'applicationFilePath():', app.applicationFilePath()
-    #print 'arguments:', map(unicode, app.arguments())
-    #print 'libraryPaths():', map(unicode, app.libraryPaths())
+    #print 'arguments:', map(str, app.arguments())
+    #print 'libraryPaths():', map(str, app.libraryPaths())
     app.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
     
     
@@ -4620,7 +4638,7 @@ def main():
                 elif ext in chordpro_extensions:
                     app.importFromChordPro(filename)
                 else:
-                    print 'WARNING: invalid file type:', filename
+                    print('WARNING: invalid file type:', filename)
     
     app.restoreOverrideCursor()
     

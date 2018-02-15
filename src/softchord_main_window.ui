@@ -375,8 +375,8 @@ p, li { white-space: pre-wrap; }
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>651</width>
-               <height>558</height>
+               <width>672</width>
+               <height>578</height>
               </rect>
              </property>
             </widget>
@@ -441,7 +441,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1087</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSong">
@@ -766,5 +766,22 @@ p, li { white-space: pre-wrap; }
   </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>new_song_button</sender>
+   <signal>clicked()</signal>
+   <receiver>actionNewSong</receiver>
+   <slot>trigger()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>48</x>
+     <y>766</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
