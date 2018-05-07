@@ -1042,18 +1042,17 @@ class Song:
                     self.app.curs.execute("UPDATE song_chord_link SET note_id=?, chord_type_id=?, bass_note_id=?, marker=?, in_parentheses=? WHERE song_id=? AND character_num=?", 
                         (chord.note_id, chord.chord_type_id, chord.bass_note_id, chord.marker, chord.in_parentheses, chord.song_id, chord.character_num))
                     chords_in_database.remove(chord.character_num)
-            
+
                 else:
                     # Add new chords
                     self.app.curs.execute("INSERT INTO song_chord_link (song_id, character_num, note_id, chord_type_id, bass_note_id, marker, in_parentheses) " + \
                             "VALUES (?, ?, ?, ?, ?, ?, ?)", (chord.song_id, chord.character_num, chord.note_id, chord.chord_type_id, chord.bass_note_id, chord.marker, chord.in_parentheses))
 
             # Remove old chords
-            #for song_char_num in chords_in_database:
-                #self.app.curs.execute("DELETE FROM song_chord_link WHERE song_id=%i AND character_num=%i" % (self.id, song_char_num))
-               #print("Remove old Chords")
+            for song_char_num in chords_in_database:
+                self.app.curs.execute("DELETE FROM song_chord_link WHERE song_id=%i AND character_num=%i" % (self.id, song_char_num))
 
-            #print('saving to database song_num:', self.number, 'key_is_major:', self.key_is_major)
+            #print('saving to database song_num:', self.number, 'key_is_major:', self.key_is_major, "\n")
 
             self.app.curs.execute("UPDATE songs SET number=?, title=?, subtitle=?, text=?, key_note_id=?, key_is_major=?, alt_key_note_id=? WHERE id=?",
                 (self.number, self.title, self.subtitle, self.getAllText(), self.key_note_id, self.key_is_major, self.alt_key_note_id, self.id))
@@ -2758,7 +2757,7 @@ class App(QtWidgets.QApplication):
                 num_printed += 1
                 progress.setValue(num_printed)
             
-            self.print_editor.setDocument(self.empty_doc)
+            #self.print_editor.setDocument(self.empty_doc)
             painter.end()
             
             self.reportScaleRatio(min_scale_ratio, len(song_ids))
