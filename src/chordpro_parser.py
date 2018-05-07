@@ -66,7 +66,7 @@ for chord_type_id, name, print_text in chord_types_list:
 chord_type_texts_dict = {}
 for id, print_text in enumerate(chord_type_prints):
     chord_type_texts_dict[print_text] = id
-    for alternative_name, official_name in alternative_type_names.iteritems():
+    for alternative_name, official_name in alternative_type_names.items():
         if print_text == official_name:
             chord_type_texts_dict[alternative_name] = id
 
@@ -163,12 +163,12 @@ if __name__ == "__main__":
 
 
     song_title = None
-    filename = sys.argv[1].decode('utf-8')
+    filename = sys.argv[0]
     
     #fh = codecs.open( unicode(filename).encode('utf-8'), 'rU', encoding='utf_8_sig')
     #fh = open(filename) #.encode('utf-8'), 'rU', encoding='utf_8_sig')
 
-    song_text = codecs.open( unicode(filename), 'rU', encoding='utf_8_sig').readlines()
+    song_text = codecs.open(str(filename), 'rU', encoding='utf_8_sig').readlines()
     
     tmp_warnings = []
     song_lines = []
@@ -184,12 +184,12 @@ if __name__ == "__main__":
             custom_string = line[1:-1]
             if custom_string.startswith('title:'):
                 song_title = custom_string[6:]
-                print 'TITLE: "%s"' % song_title
+                print('TITLE: "%s"' % song_title)
             elif custom_string.startswith('t:'):
                 song_title = custom_string[2:]
-                print 'TITLE: "%s"' % song_title
+                print('TITLE: "%s"' % song_title)
             else:
-                print 'CUSTOM:', custom_string
+                print('CUSTOM:', custom_string)
                 tmp_warnings.append( 'WARNING: line ignored: "%s"' % line )
             continue
         
@@ -215,8 +215,8 @@ if __name__ == "__main__":
             curr_adjusted_char_num += 1
         
         
-        print 'line lyrics:', line_lyrics
-        print 'line_chords:', line_chords
+        print('line lyrics:', line_lyrics)
+        print('line_chords:', line_chords)
         
 
         chords_dict = {}
@@ -225,19 +225,19 @@ if __name__ == "__main__":
         for char_num, chord_text in line_chords:
             try:
                 converted_chord = convert_chord(chord_text)
-            except ValueError, err:
+            except ValueError as err:
                 tmp_warnings.append( 'WARNING: %s CHORD "%s"' % (str(err), word.encode('utf-8')) )
             else:
                 #converted_chords.append( (char_num, converted_chord) )
                 chords_dict[char_num] = converted_chord
         
         #print 'converted_chords:', converted_chords
-        print ''
+        print('')
         song_lines.append( (line_lyrics, chords_dict) )
 
 
     for warning_str in tmp_warnings:
-        print '  ', warning_str
+        print('  ', warning_str)
     
     
     # Combine all lines together:

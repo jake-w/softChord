@@ -12,9 +12,9 @@ import urllib
 folder_path = sys.argv[1]
 output_file = sys.argv[2]
 
-print 'Folder path:', folder_path
+print('Folder path:', folder_path)
 
-print ''
+print('')
 
 
 fh = open(output_file, 'w')
@@ -28,7 +28,7 @@ os.chdir(folder_path)
 
 
 for filename in glob.glob("*.doc") + glob.glob("*.pdf"):
-    print '  ', filename
+    print('  ', filename)
     name = filename[:-4] #.decode('utf-8') # strip ".doc"
     url = "http://churchconcord.org/songs/" + urllib.quote(filename)
     link_name = "Download"
@@ -41,6 +41,6 @@ os.chdir(bu_dir)
 
 fh.close()
 
-print 'Output CSV file:', output_file
+print('Output CSV file:', output_file)
 
 

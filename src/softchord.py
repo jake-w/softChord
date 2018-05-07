@@ -1049,10 +1049,12 @@ class Song:
                             "VALUES (?, ?, ?, ?, ?, ?, ?)", (chord.song_id, chord.character_num, chord.note_id, chord.chord_type_id, chord.bass_note_id, chord.marker, chord.in_parentheses))
 
             # Remove old chords
-            for song_char_num in chords_in_database:
-                self.app.curs.execute("DELETE FROM song_chord_link WHERE song_id=%i AND character_num=%i" % (self.id, song_char_num))
-            
-            #print 'saving to database song_num:', self.number, 'key_is_major:', self.key_is_major
+            #for song_char_num in chords_in_database:
+                #self.app.curs.execute("DELETE FROM song_chord_link WHERE song_id=%i AND character_num=%i" % (self.id, song_char_num))
+               #print("Remove old Chords")
+
+            #print('saving to database song_num:', self.number, 'key_is_major:', self.key_is_major)
+
             self.app.curs.execute("UPDATE songs SET number=?, title=?, subtitle=?, text=?, key_note_id=?, key_is_major=?, alt_key_note_id=? WHERE id=?",
                 (self.number, self.title, self.subtitle, self.getAllText(), self.key_note_id, self.key_is_major, self.alt_key_note_id, self.id))
             self.app.curs.commit()

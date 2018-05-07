@@ -1,0 +1,13 @@
+{
+  "User": {
+    "Id": 2058000,
+    "Username": "jake-w",
+    "Name": "Jake White",
+    "Email": "jake_mw@yahoo.com",
+    "AvatarUrl": "https://secure.gravatar.com/avatar/195a2c351fa7e3aedab77eeedc8c8574?s=80&d=identicon",
+    "PrivateToken": "4a0274dad62a336922e3706f2ca66b0f16c9f0eb2cccef1ac78f682c8e43ff20",
+    "Host": "https://gitlab.com",
+    "TwoFactorEnabled": false,
+    "ApiVersion": 3
+  }
+}

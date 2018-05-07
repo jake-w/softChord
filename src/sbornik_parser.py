@@ -192,9 +192,9 @@ song_text = []
 
 for song_num, song_title, song_text in all_songs:
     if song_title == None:
-        print '\n\nSONG', song_num, None
+        print('\n\nSONG', song_num, None)
     else:
-        print '\n\nSONG', song_num, song_title.encode('utf-8')
+        print('\n\nSONG', song_num, song_title.encode('utf-8'))
 
 
     song_lines = [] # each item is a tuple of line text and chord list.
@@ -218,7 +218,7 @@ for song_num, song_title, song_text in all_songs:
             else:
                 try:
                     converted_chord = convert_chord(word)
-                except ValueError, err:
+                except(ValueError, err):
                     tmp_warnings.append( 'WARNING: %s CHORD "%s"' % (str(err), word.encode('utf-8')) )
                     num_non_chords += 1
                 else:
@@ -236,13 +236,13 @@ for song_num, song_title, song_text in all_songs:
             # This is a chords line
             prev_chords = tmp_chords
             for warning_str in tmp_warnings:
-                print '  ', warning_str
+                print('  ', warning_str)
         else:
             #print 'LYRICS LINE:', line.encode('utf-8')
             # This is a lyrics line
             if prev_chords:
                 chord_spacing = len(line) / len(prev_chords)
-                print 'line length:', len(line), 'chord_spacing:', chord_spacing
+                print('line length:', len(line), 'chord_spacing:', chord_spacing)
                 
                 # Space out the chords:
                 chords_dict = {}
@@ -273,21 +273,21 @@ for song_num, song_title, song_text in all_songs:
     
 
     if True:
-        print 'IMPORTING'
+        print('IMPORTING')
         
         song_id = 0
         for row in curs.execute("SELECT MAX(id) from songs"):
             song_id = row[0] + 1
-        print 'song_id:', song_id
-        print 'song_num:', song_num
-        print 'song_title:', song_title.encode('utf-8')
+        print('song_id:', song_id)
+        print('song_num:', song_num)
+        print('song_title:', song_title.encode('utf-8'))
         
         # Replace all double quotes with single quotes:
         global_song_text = global_song_text.replace('"', "'")
 
         out = curs.execute("INSERT INTO songs (id, number, text, title) " + \
             'VALUES (%i, %i, "%s", "%s")' % (song_id, song_num, global_song_text, song_title))
-        print 'song add out:', out
+        print('song add out:', out)
         
         for song_char_num, chord in global_song_chords.iteritems():
             (marker, note_id, type_id, bass_id, in_parentheses) = chord
@@ -305,7 +305,7 @@ for song_num, song_title, song_text in all_songs:
                         'VALUES (%i, %i, %i, %i, %i, %i, "%s", %i)' % (chord_id, song_id, song_char_num, note_id, type_id, bass_id, marker, in_parentheses))
         
         curs.commit()
-        print 'DONE', out
+        print('DONE', out)
 
     # Go to next song
 
